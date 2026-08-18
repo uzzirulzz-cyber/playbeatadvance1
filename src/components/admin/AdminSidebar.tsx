@@ -93,6 +93,15 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       ]
     },
     {
+      title: 'MARKETING & INTEGRATIONS',
+      items: [
+        { id: 'woocommerce' as AdminTab, label: 'WooCommerce Bridge', icon: ShoppingBag },
+        { id: 'social' as AdminTab, label: 'Social Automation', icon: Share2 },
+        { id: 'tiktok' as AdminTab, label: 'TikTok Leads Engine', icon: Sparkles },
+        { id: 'email' as AdminTab, label: 'Email & SMS Campaigns', icon: Mail },
+      ]
+    },
+    {
       title: 'PAYMENTS & SECURITY',
       items: [
         { id: 'finance' as AdminTab, label: 'Financial Balance', icon: DollarSign },

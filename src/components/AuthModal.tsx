@@ -12,9 +12,9 @@ export const AuthModal: React.FC = () => {
   } = useStore();
 
   const [mode, setMode] = useState<'login' | 'register' | 'admin'>('login');
-  const [email, setEmail] = useState<string>('customer@playbeat.digital');
-  const [name, setName] = useState<string>('Valued Customer');
-  const [password, setPassword] = useState<string>('playbeat1122');
+  const [email, setEmail] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -172,11 +172,6 @@ export const AuthModal: React.FC = () => {
                 className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-[#fcb800]"
               />
             </div>
-            {mode === 'admin' && (
-              <p className="text-[10px] text-slate-500 mt-1">
-                Admin master password: <code className="text-[#fcb800]">playbeat1122</code>
-              </p>
-            )}
           </div>
 
           <button
@@ -190,13 +185,6 @@ export const AuthModal: React.FC = () => {
             </span>
             <ArrowRight className="w-4 h-4" />
           </button>
-
-          {/* Quick Demo Credentials */}
-          <div className="pt-2 border-t border-slate-800/80 text-center">
-            <span className="text-[10px] text-slate-500">
-              Quick Test Admin: <code className="text-yellow-400">admin@playbeat.digital</code> / <code className="text-yellow-400">playbeat1122</code>
-            </span>
-          </div>
         </form>
       </div>
     </div>

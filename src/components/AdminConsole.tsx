@@ -45,7 +45,7 @@ export const AdminConsole: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
   const [passwordInput, setPasswordInput] = useState('');
-  const [usernameInput, setUsernameInput] = useState('admin@playbeat.digital');
+  const [usernameInput, setUsernameInput] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [adminSearch, setAdminSearch] = useState('');
@@ -58,12 +58,6 @@ export const AdminConsole: React.FC = () => {
     if (!res.success) {
       setLoginError(res.message);
     }
-  };
-
-  const handleAutoFill = () => {
-    setPasswordInput('playbeat1122');
-    setUsernameInput('admin@playbeat.digital');
-    setLoginError('');
   };
 
   const handleResetAll = () => {
@@ -110,6 +104,7 @@ export const AdminConsole: React.FC = () => {
               <input
                 type="text"
                 required
+                placeholder="Enter administrator username or email"
                 value={usernameInput}
                 onChange={(e) => setUsernameInput(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-[#fcb800] transition-colors font-mono"
@@ -117,21 +112,12 @@ export const AdminConsole: React.FC = () => {
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-slate-300 font-bold">Master Password</label>
-                <button
-                  type="button"
-                  onClick={handleAutoFill}
-                  className="text-[11px] text-[#fcb800] hover:underline font-semibold cursor-pointer"
-                >
-                  Autofill demo (playbeat1122)
-                </button>
-              </div>
+              <label className="block text-slate-300 font-bold mb-1.5">Master Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
-                  placeholder="Enter playbeat1122"
+                  placeholder="Enter administrator master password"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-[#fcb800] transition-colors font-mono"
@@ -139,7 +125,7 @@ export const AdminConsole: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -155,23 +141,10 @@ export const AdminConsole: React.FC = () => {
             </button>
           </form>
 
-          {/* Quick autofill helper */}
-          <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
-            <div>
-              Password: <code className="text-yellow-400 font-mono font-bold">playbeat1122</code>
-            </div>
-            <button
-              onClick={handleAutoFill}
-              className="px-2.5 py-1 rounded-lg bg-yellow-400/10 text-[#fcb800] border border-yellow-400/20 font-bold hover:bg-yellow-400/20 transition-colors cursor-pointer"
-            >
-              Fill Credentials
-            </button>
-          </div>
-
           <div className="text-center pt-2">
             <button
               onClick={() => setActiveView('storefront')}
-              className="text-xs text-slate-400 hover:text-white transition-colors"
+              className="text-xs text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               ← Return to public Storefront
             </button>
