@@ -38,10 +38,11 @@ export const LiveSupportAssistant: React.FC = () => {
     return (
       <button
         onClick={() => setIsSupportOpen(true)}
-        className="fixed bottom-5 right-5 z-40 p-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-2xl shadow-indigo-600/50 flex items-center gap-2 font-bold text-xs cursor-pointer transform hover:scale-105 transition-all border border-indigo-400/30"
+        className="fixed bottom-6 left-6 z-50 p-3.5 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-2xl shadow-indigo-600/50 flex items-center gap-2 font-bold text-xs cursor-pointer transform hover:scale-105 transition-all border border-indigo-400/30"
+        title="24/7 Live Key Support"
       >
         <Headphones className="w-5 h-5" />
-        <span className="hidden sm:inline">24/7 Live Key Support</span>
+        <span className="hidden sm:inline">Live Support</span>
         <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
       </button>
     );
@@ -94,7 +95,7 @@ export const LiveSupportAssistant: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 w-full max-w-sm rounded-3xl glass-dropdown border border-indigo-500/40 shadow-2xl overflow-hidden flex flex-col h-[480px] animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed bottom-6 left-6 z-50 w-full max-w-sm rounded-3xl glass-dropdown border border-indigo-500/40 shadow-2xl overflow-hidden flex flex-col h-[480px] animate-in fade-in slide-in-from-bottom-5 duration-200">
       
       {/* Header */}
       <div className="p-3.5 bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 border-b border-slate-800 flex items-center justify-between">
