@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
 import { AdminSidebar, AdminTab } from './admin/AdminSidebar';
 import { AdminHeader } from './admin/AdminHeader';
@@ -51,12 +51,31 @@ export const AdminConsole: React.FC = () => {
   const [adminSearch, setAdminSearch] = useState('');
   const [resetToast, setResetToast] = useState(false);
 
+  // Always reset login inputs on mount / state change
+  useEffect(() => {
+    if (!isAdminAuthenticated) {
+      setPasswordInput('');
+      setUsernameInput('');
+      setLoginError('');
+    }
+  }, [isAdminAuthenticated]);
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
-    const res = adminLogin(passwordInput);
+
+    const normalizedUsername = usernameInput.trim().toLowerCase();
+    if (normalizedUsername !== 'admin@playbeat.digital') {
+      setLoginError('Access restricted. Only admin@playbeat.digital is authorized as Super Admin. There are no staff accounts.');
+      return;
+    }
+
+    const res = adminLogin(passwordInput, usernameInput);
     if (!res.success) {
       setLoginError(res.message);
+    } else {
+      setPasswordInput('');
+      setUsernameInput('');
     }
   };
 
@@ -97,13 +116,14 @@ export const AdminConsole: React.FC = () => {
             </div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-4 text-xs">
+          {/* Form with autocomplete disabled */}
+          <form onSubmit={handleLogin} autoComplete="off" className="space-y-4 text-xs">
             <div>
               <label className="block text-slate-300 font-bold mb-1.5">Admin Username / Email</label>
               <input
                 type="text"
                 required
+                autoComplete="off"
                 placeholder="Enter administrator username or email"
                 value={usernameInput}
                 onChange={(e) => setUsernameInput(e.target.value)}
@@ -117,6 +137,7 @@ export const AdminConsole: React.FC = () => {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
+                  autoComplete="new-password"
                   placeholder="Enter administrator master password"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}

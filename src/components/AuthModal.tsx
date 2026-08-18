@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { useStore } from '../store/useStore';
-import { X, Lock, Mail, User, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
+import { X, Lock, Mail, User, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export const AuthModal: React.FC = () => {
   const { 
     isAuthModalOpen, 
     setIsAuthModalOpen, 
-    customerLogin, 
-    adminLogin,
-    setActiveView
+    customerLogin
   } = useStore();
 
-  const [mode, setMode] = useState<'login' | 'register' | 'admin'>('login');
+  const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -25,17 +23,8 @@ export const AuthModal: React.FC = () => {
     setError(null);
     setSuccess(null);
 
-    if (mode === 'admin') {
-      const res = adminLogin(password);
-      if (res.success) {
-        setSuccess('Super Admin authenticated!');
-        setTimeout(() => {
-          setIsAuthModalOpen(false);
-          setActiveView('admin');
-        }, 600);
-      } else {
-        setError(res.message);
-      }
+    if (!email.trim()) {
+      setError('Please enter a valid email address');
       return;
     }
 
@@ -45,13 +34,13 @@ export const AuthModal: React.FC = () => {
         return;
       }
       customerLogin(email, name);
-      setSuccess(`Welcome to PlayBeat, ${name}!`);
+      setSuccess(`Welcome to PlayBeat, ${name}! Your customer account is ready.`);
       setTimeout(() => setIsAuthModalOpen(false), 500);
       return;
     }
 
     // Default Customer Login
-    customerLogin(email, name || 'Customer');
+    customerLogin(email, name || email.split('@')[0] || 'Customer');
     setSuccess('Signed in successfully!');
     setTimeout(() => setIsAuthModalOpen(false), 500);
   };
@@ -67,8 +56,8 @@ export const AuthModal: React.FC = () => {
               PB
             </div>
             <div>
-              <h3 className="font-bold text-white text-sm">PlayBeat Digital Portal</h3>
-              <p className="text-[11px] text-slate-400">Secure Access & Instant Digital Key Vault</p>
+              <h3 className="font-bold text-white text-sm">PlayBeat Customer Portal</h3>
+              <p className="text-[11px] text-slate-400">Customer Account • Instant Keys &amp; Orders</p>
             </div>
           </div>
 
@@ -80,8 +69,8 @@ export const AuthModal: React.FC = () => {
           </button>
         </div>
 
-        {/* Tab Switcher */}
-        <div className="grid grid-cols-3 p-2 bg-slate-900/50 border-b border-slate-800 text-xs font-bold text-center">
+        {/* Tab Switcher - Strictly Customer */}
+        <div className="grid grid-cols-2 p-2 bg-slate-900/50 border-b border-slate-800 text-xs font-bold text-center">
           <button
             onClick={() => { setMode('login'); setError(null); }}
             className={`py-2 rounded-xl transition-all cursor-pointer ${
@@ -96,20 +85,12 @@ export const AuthModal: React.FC = () => {
               mode === 'register' ? 'bg-[#fcb800] text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Register
-          </button>
-          <button
-            onClick={() => { setMode('admin'); setError(null); }}
-            className={`py-2 rounded-xl transition-all cursor-pointer ${
-              mode === 'admin' ? 'bg-[#fcb800] text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Staff Admin
+            Register New Account
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 text-xs">
+        <form onSubmit={handleSubmit} autoComplete="off" className="p-6 space-y-4 text-xs">
           {error && (
             <div className="p-3 rounded-xl bg-red-950/80 border border-red-500/30 text-red-300 text-xs">
               {error}
@@ -131,6 +112,7 @@ export const AuthModal: React.FC = () => {
                 <input
                   type="text"
                   required
+                  autoComplete="off"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ali Khan"
@@ -140,32 +122,30 @@ export const AuthModal: React.FC = () => {
             </div>
           )}
 
-          {mode !== 'admin' && (
-            <div>
-              <label className="block text-slate-300 font-bold mb-1">Email Address</label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="customer@playbeat.digital"
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-[#fcb800]"
-                />
-              </div>
+          <div>
+            <label className="block text-slate-300 font-bold mb-1">Email Address</label>
+            <div className="relative">
+              <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+              <input
+                type="email"
+                required
+                autoComplete="off"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="customer@playbeat.digital"
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-[#fcb800]"
+              />
             </div>
-          )}
+          </div>
 
           <div>
-            <label className="block text-slate-300 font-bold mb-1">
-              {mode === 'admin' ? 'Master Admin Password' : 'Password'}
-            </label>
+            <label className="block text-slate-300 font-bold mb-1">Password</label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
               <input
                 type="password"
                 required
+                autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
@@ -179,9 +159,7 @@ export const AuthModal: React.FC = () => {
             className="w-full py-3 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-black text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-yellow-500/20 transition-all"
           >
             <span>
-              {mode === 'login' && 'Sign In to Account'}
-              {mode === 'register' && 'Create Free Account'}
-              {mode === 'admin' && 'Access Admin Console'}
+              {mode === 'login' ? 'Sign In to Customer Account' : 'Create Free Customer Account'}
             </span>
             <ArrowRight className="w-4 h-4" />
           </button>

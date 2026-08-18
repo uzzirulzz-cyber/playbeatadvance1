@@ -18,7 +18,7 @@ interface UserRecord {
   name: string;
   email: string;
   phone: string;
-  role: 'CUSTOMER' | 'VENDOR' | 'AFFILIATE' | 'ADMIN';
+  role: 'SUPER_ADMIN' | 'CUSTOMER';
   totalOrders: number;
   totalSpentPKR: number;
   joinedDate: string;
@@ -28,6 +28,17 @@ interface UserRecord {
 export const UsersView: React.FC = () => {
   const [search, setSearch] = useState('');
   const [usersList, setUsersList] = useState<UserRecord[]>([
+    {
+      id: 'usr-admin',
+      name: 'PlayBeat Super Admin',
+      email: 'admin@playbeat.digital',
+      phone: '+92 332 1029333',
+      role: 'SUPER_ADMIN',
+      totalOrders: 0,
+      totalSpentPKR: 0,
+      joinedDate: '2026-01-01',
+      status: 'ACTIVE'
+    },
     {
       id: 'usr-1',
       name: 'Alex Vance',
@@ -52,29 +63,30 @@ export const UsersView: React.FC = () => {
     },
     {
       id: 'usr-3',
-      name: 'Lumix Cinema Official',
-      email: 'vendor@lumix.pk',
+      name: 'Zainab Ahmed',
+      email: 'zainab@gmail.com',
       phone: '+92 333 4567890',
-      role: 'VENDOR',
-      totalOrders: 18,
-      totalSpentPKR: 890000,
+      role: 'CUSTOMER',
+      totalOrders: 6,
+      totalSpentPKR: 42500,
       joinedDate: '2026-05-01',
       status: 'ACTIVE'
     },
     {
       id: 'usr-4',
-      name: 'Saad Affiliates',
-      email: 'saad@growthhub.pk',
+      name: 'Saad Malik',
+      email: 'saad.malik@outlook.com',
       phone: '+92 312 3456789',
-      role: 'AFFILIATE',
-      totalOrders: 32,
-      totalSpentPKR: 45000,
+      role: 'CUSTOMER',
+      totalOrders: 3,
+      totalSpentPKR: 14200,
       joinedDate: '2026-07-19',
       status: 'ACTIVE'
     }
   ]);
 
   const toggleStatus = (id: string) => {
+    if (id === 'usr-admin') return; // Cannot block super admin
     setUsersList(usersList.map(u => u.id === id ? { ...u, status: u.status === 'ACTIVE' ? 'BLOCKED' : 'ACTIVE' } : u));
   };
 
@@ -143,12 +155,18 @@ export const UsersView: React.FC = () => {
                     </div>
                   </td>
                   <td className="py-3 px-4">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
-                      {user.role}
-                    </span>
+                    {user.role === 'SUPER_ADMIN' ? (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-yellow-400/15 text-[#fcb800] border border-yellow-400/30">
+                        Sole Super Admin
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                        Customer Account
+                      </span>
+                    )}
                   </td>
                   <td className="py-3 px-4">
-                    <div className="text-slate-200">{user.email}</div>
+                    <div className="text-slate-200 font-medium">{user.email}</div>
                     <div className="text-[10px] text-slate-400 font-mono">{user.phone}</div>
                   </td>
                   <td className="py-3 px-4 font-mono font-bold text-slate-200">
@@ -167,16 +185,20 @@ export const UsersView: React.FC = () => {
                     </span>
                   </td>
                   <td className="py-3 px-4 text-right">
-                    <button
-                      onClick={() => toggleStatus(user.id)}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer ${
-                        user.status === 'ACTIVE'
-                          ? 'bg-red-950/40 border border-red-500/30 text-red-400 hover:bg-red-900/60'
-                          : 'bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-900/60'
-                      }`}
-                    >
-                      {user.status === 'ACTIVE' ? 'Block' : 'Unblock'}
-                    </button>
+                    {user.role === 'SUPER_ADMIN' ? (
+                      <span className="text-[11px] text-slate-500 font-mono italic">Protected</span>
+                    ) : (
+                      <button
+                        onClick={() => toggleStatus(user.id)}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer ${
+                          user.status === 'ACTIVE'
+                            ? 'bg-red-950/40 border border-red-500/30 text-red-400 hover:bg-red-900/60'
+                            : 'bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-900/60'
+                        }`}
+                      >
+                        {user.status === 'ACTIVE' ? 'Block' : 'Unblock'}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

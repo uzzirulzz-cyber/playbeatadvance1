@@ -23,6 +23,15 @@ import { INITIAL_PRODUCTS, INITIAL_CATEGORIES, INITIAL_COUPONS, INITIAL_NOTIFICA
 import { generateLicenseKey, generateOrderNumber, formatCurrency, formatPKR } from '../lib/utils';
 import confetti from 'canvas-confetti';
 
+export const DEFAULT_CUSTOMER: User = {
+  id: 'u-guest',
+  name: 'New Customer',
+  email: 'customer@playbeat.digital',
+  role: 'CUSTOMER',
+  balancePKR: 0,
+  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80'
+};
+
 const DEFAULT_STORE_SETTINGS: StoreSettings = {
   storeName: 'PlayBeat Digital',
   storeEmail: 'support@playbeat.digital',
@@ -219,7 +228,7 @@ interface StoreContextType {
   ) => Order;
   updateOrderStatus: (orderId: string, status: Order['status']) => void;
   
-  adminLogin: (password: string) => { success: boolean; message: string };
+  adminLogin: (password: string, username?: string) => { success: boolean; message: string };
   adminLogout: () => void;
   customerLogin: (email: string, name?: string) => void;
   customerLogout: () => void;
@@ -304,7 +313,16 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const [user, setUser] = useState<User>(() => {
     const saved = localStorage.getItem('playbeat_user');
-    return saved ? JSON.parse(saved) : DEMO_USER;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return {
+          ...parsed,
+          balancePKR: typeof parsed.balancePKR === 'number' ? parsed.balancePKR : 0
+        };
+      } catch (e) {}
+    }
+    return DEFAULT_CUSTOMER;
   });
 
   const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => {
@@ -398,10 +416,16 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [isCustomerLoggedIn, setIsCustomerLoggedIn] = useState<boolean>(true);
   
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
-    return localStorage.getItem('playbeat_admin_auth') === 'true';
-  });
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(false);
   const [isMongoConnected, setIsMongoConnected] = useState<boolean>(false);
+
+  // Clear any legacy saved admin session on startup
+  useEffect(() => {
+    try {
+      localStorage.removeItem('playbeat_admin_auth');
+      sessionStorage.removeItem('playbeat_admin_auth');
+    } catch (e) {}
+  }, []);
 
   // Sync state to MongoDB & fetch latest remote dataset
   useEffect(() => {
@@ -707,48 +731,74 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o));
   };
 
-  // Auth
-  const adminLogin = (password: string) => {
+  // Auth - Non-persistent session (must fill up credentials every time)
+  const adminLogin = (password: string, username?: string) => {
+    if (username && username.trim().toLowerCase() !== 'admin@playbeat.digital') {
+      return { success: false, message: 'Access restricted. Only admin@playbeat.digital is authorized as Super Admin. There are no staff accounts.' };
+    }
     const validPasswords = ['playbeat1122', 'PlayBeat@AdminPanel2026'];
     const envPassword = (typeof process !== 'undefined' && process.env?.REACT_APP_ADMIN_PASSWORD) || '';
     if (envPassword) validPasswords.push(envPassword);
 
     if (validPasswords.includes(password.trim())) {
       setIsAdminAuthenticated(true);
-      localStorage.setItem('playbeat_admin_auth', 'true');
-      return { success: true, message: 'Welcome Master Super Admin!' };
+      return { success: true, message: 'Welcome Master Super Admin (admin@playbeat.digital)!' };
     }
     return { success: false, message: 'Invalid master password. Please verify your credentials.' };
   };
 
   const adminLogout = () => {
     setIsAdminAuthenticated(false);
-    localStorage.removeItem('playbeat_admin_auth');
+    try {
+      localStorage.removeItem('playbeat_admin_auth');
+    } catch (e) {}
     setActiveView('storefront');
   };
 
   const customerLogin = (email: string, name?: string) => {
-    setUser({
-      id: `u-${Date.now()}`,
-      name: name || 'Valued Customer',
-      email: email.trim(),
-      role: 'CUSTOMER',
-      balancePKR: 5000,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
-    });
+    const trimmedEmail = email.trim().toLowerCase();
+    
+    // Check if user account was previously stored
+    let storedUsers: User[] = [];
+    try {
+      const saved = localStorage.getItem('playbeat_registered_customers');
+      if (saved) storedUsers = JSON.parse(saved);
+    } catch (e) {}
+
+    let targetUser = storedUsers.find(u => u.email.toLowerCase() === trimmedEmail);
+
+    if (!targetUser) {
+      // Brand new signup user: STRICTLY 0 BALANCE, NO PREVIOUS ORDERS/HISTORY
+      targetUser = {
+        id: `u-${Date.now()}`,
+        name: name?.trim() || email.split('@')[0] || 'Valued Customer',
+        email: email.trim(),
+        role: 'CUSTOMER',
+        balancePKR: 0,
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80'
+      };
+      storedUsers.push(targetUser);
+      try {
+        localStorage.setItem('playbeat_registered_customers', JSON.stringify(storedUsers));
+      } catch (e) {}
+    } else if (name && targetUser.name !== name) {
+      targetUser.name = name;
+    }
+
+    setUser(targetUser);
+    try {
+      localStorage.setItem('playbeat_user', JSON.stringify(targetUser));
+    } catch (e) {}
     setIsCustomerLoggedIn(true);
     setIsAuthModalOpen(false);
   };
 
   const customerLogout = () => {
     setIsCustomerLoggedIn(false);
-    setUser({
-      id: 'guest',
-      name: 'Guest Customer',
-      email: 'guest@playbeat.digital',
-      role: 'CUSTOMER',
-      balancePKR: 0
-    });
+    setUser(DEFAULT_CUSTOMER);
+    try {
+      localStorage.removeItem('playbeat_user');
+    } catch (e) {}
   };
 
   // Subscriptions & Tickets & Inventory Keys

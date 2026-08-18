@@ -110,8 +110,18 @@ export const CustomerDashboard: React.FC = () => {
     setReplyMessage('');
   };
 
-  const myOrders = orders;
-  const activeSubs = subscriptions.filter(s => s.status === 'ACTIVE');
+  const userEmail = (user.email || '').trim().toLowerCase();
+  const myOrders = orders.filter(o => 
+    (o.customerEmail && o.customerEmail.trim().toLowerCase() === userEmail) || 
+    (o.customerId && o.customerId === user.id)
+  );
+  const activeSubs = subscriptions.filter(s => 
+    s.status === 'ACTIVE' && 
+    s.customerEmail && s.customerEmail.trim().toLowerCase() === userEmail
+  );
+  const myTickets = supportTickets.filter(t => 
+    t.customerEmail && t.customerEmail.trim().toLowerCase() === userEmail
+  );
   const allVaultKeys = myOrders.flatMap(o => o.items.flatMap(i => (i.licenseKeys || []).map(k => ({
     key: k,
     productTitle: i.product.title,
@@ -120,7 +130,7 @@ export const CustomerDashboard: React.FC = () => {
     instructions: i.instructions || 'Instant activation code.'
   }))));
 
-  const selectedTicket = supportTickets.find(t => t.id === selectedTicketId);
+  const selectedTicket = myTickets.find(t => t.id === selectedTicketId);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
@@ -164,7 +174,7 @@ export const CustomerDashboard: React.FC = () => {
                 { id: 'vault' as const, label: 'Digital Keys Vault', icon: Key, count: allVaultKeys.length },
                 { id: 'subscriptions' as const, label: 'Active Subscriptions', icon: RefreshCw, count: activeSubs.length },
                 { id: 'wallet' as const, label: 'Wallet & Credits', icon: Wallet },
-                { id: 'tickets' as const, label: 'Support Tickets', icon: Headphones, count: supportTickets.length },
+                { id: 'tickets' as const, label: 'Support Tickets', icon: Headphones, count: myTickets.length },
                 { id: 'security' as const, label: 'Security & Activity', icon: Shield },
               ].map(item => {
                 const Icon = item.icon;
@@ -438,13 +448,14 @@ export const CustomerDashboard: React.FC = () => {
           {/* 4. SUBSCRIPTIONS TAB */}
           {activeTab === 'subscriptions' && (
             <div className="space-y-4">
-              {subscriptions.length === 0 ? (
+              {activeSubs.length === 0 ? (
                 <div className="p-12 text-center space-y-2 bg-[#070b14] rounded-2xl border border-slate-800">
                   <RefreshCw className="w-8 h-8 text-slate-600 mx-auto" />
-                  <p className="text-xs text-slate-400">No active recurring subscriptions found.</p>
+                  <h4 className="font-bold text-white text-xs">No Active Subscriptions</h4>
+                  <p className="text-xs text-slate-400">Subscribe to IPTV 4K passes or AI models for recurring automated renewals.</p>
                 </div>
               ) : (
-                subscriptions.map(sub => (
+                activeSubs.map(sub => (
                   <div key={sub.id} className="p-4 rounded-2xl bg-[#070b14] border border-slate-800 space-y-3">
                     <div className="flex items-center justify-between text-xs">
                       <div>
@@ -622,7 +633,14 @@ export const CustomerDashboard: React.FC = () => {
 
               {/* Tickets List */}
               <div className="space-y-3">
-                {supportTickets.map(ticket => (
+                {myTickets.length === 0 ? (
+                  <div className="p-8 text-center space-y-2 bg-[#070b14] rounded-2xl border border-slate-800">
+                    <Headphones className="w-8 h-8 text-slate-600 mx-auto" />
+                    <h5 className="font-bold text-white text-xs">No Support Tickets</h5>
+                    <p className="text-[11px] text-slate-400">Need help with an activation code or order? Click &quot;Open New Ticket&quot; above.</p>
+                  </div>
+                ) : (
+                  myTickets.map(ticket => (
                   <div key={ticket.id} className="p-4 rounded-2xl bg-[#070b14] border border-slate-800 space-y-3">
                     <div className="flex items-center justify-between text-xs">
                       <div className="space-y-0.5">
@@ -675,7 +693,7 @@ export const CustomerDashboard: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                ))}
+                )))}
               </div>
             </div>
           )}
