@@ -29,12 +29,12 @@ export const HeroSectionPremium: React.FC = () => {
   ];
 
   return (
-    <section className="w-full py-16 sm:py-24 bg-[radial-gradient(circle_at_top_left,_rgba(215,165,58,0.12),_transparent_45%),linear-gradient(180deg,#f9f6f0_0%,#f3f6fb_100%)] relative overflow-hidden">
+    <section className="w-full py-16 sm:py-24 bg-[linear-gradient(180deg,#f3f4f6_0%,#e9ebf0_60%,#e4e7ed_97%,#faebeb_100%)] relative overflow-hidden">
       
       {/* Decorative background elements */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#d7a53a] opacity-10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#10233d] opacity-5 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/5 opacity-40 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-slate-500/10 opacity-30 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
@@ -142,13 +142,13 @@ export const HeroSectionPremium: React.FC = () => {
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-8 border-y border-[#E2E6EB]">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-8 border-y border-slate-300/70">
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center">
               <div className="text-3xl sm:text-4xl font-black text-[#FFD21F] mb-1">
                 {stat.number}
               </div>
-              <div className="text-sm text-[#6B7280] font-medium">
+              <div className="text-sm text-slate-500 font-semibold">
                 {stat.label}
               </div>
             </div>
@@ -161,13 +161,13 @@ export const HeroSectionPremium: React.FC = () => {
             const Icon = indicator.icon;
             return (
               <div key={idx} className="text-center">
-                <div className="w-16 h-16 bg-[#FFD21F]/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Icon className="w-8 h-8 text-[#FFD21F]" />
+                <div className="w-16 h-16 bg-gradient-to-br from-amber-400/15 via-red-500/5 to-amber-500/15 border border-amber-400/25 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+                  <Icon className="w-8 h-8 text-[#d7a53a]" />
                 </div>
-                <h4 className="font-bold text-[#0B1F3A] mb-1">
+                <h4 className="font-bold text-[#10233d] mb-1">
                   {indicator.label}
                 </h4>
-                <p className="text-sm text-[#6B7280]">
+                <p className="text-sm text-slate-500">
                   {indicator.desc}
                 </p>
               </div>

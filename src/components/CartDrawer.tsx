@@ -118,7 +118,7 @@ export const CartDrawer: React.FC = () => {
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-800">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-yellow-400/10 text-[#fcb800] flex items-center justify-center font-bold border border-yellow-400/20">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-r from-[#0a1730] to-[#142d56] text-[#fcb800] flex items-center justify-center font-bold border border-slate-700/60">
                 <ShoppingBag className="w-4 h-4" />
               </div>
               <div>
@@ -153,7 +153,7 @@ export const CartDrawer: React.FC = () => {
                   </p>
                   <button
                     onClick={() => setIsCartOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-bold text-xs cursor-pointer shadow-md"
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-bold text-xs cursor-pointer shadow-md"
                   >
                     Start Shopping
                   </button>
@@ -282,7 +282,7 @@ export const CartDrawer: React.FC = () => {
                       onClick={() => setSelectedGateway(gw.id)}
                       className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
                         selectedGateway === gw.id
-                          ? 'bg-yellow-400/10 border-[#fcb800] text-white shadow-md'
+                          ? 'bg-gradient-to-r from-[#0a1730] to-[#142d56] border-[#fcb800] text-white shadow-md'
                           : 'bg-[#070b14] border-slate-800 text-slate-400 hover:border-slate-700'
                       }`}
                     >
@@ -438,10 +438,10 @@ export const CartDrawer: React.FC = () => {
 
               <button
                 onClick={() => setStep('checkout')}
-                className="w-full py-3.5 rounded-2xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-yellow-500/20 cursor-pointer transition-all active:scale-95"
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-black/40 cursor-pointer transition-all active:scale-95"
               >
                 <span>Proceed to Checkout</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 text-[#fcb800]" />
               </button>
             </div>
           )}
@@ -463,14 +463,14 @@ export const CartDrawer: React.FC = () => {
                 <button
                   disabled={isProcessing}
                   onClick={handleCompletePayment}
-                  className="flex-1 py-3 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-yellow-500/20 cursor-pointer transition-all active:scale-95"
+                  className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-black/40 cursor-pointer transition-all active:scale-95"
                 >
                   {isProcessing ? (
                     <span>Processing Payment...</span>
                   ) : (
                     <>
                       <span>Confirm & Pay ({selectedGateway.toUpperCase()})</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 text-[#fcb800]" />
                     </>
                   )}
                 </button>
@@ -482,7 +482,7 @@ export const CartDrawer: React.FC = () => {
             <div className="pt-4 border-t border-slate-800">
               <button
                 onClick={handleClose}
-                className="w-full py-3 rounded-xl bg-[#fcb800] text-slate-950 font-black text-xs cursor-pointer shadow-md"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs cursor-pointer shadow-md"
               >
                 Done / Back to Store
               </button>

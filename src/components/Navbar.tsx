@@ -56,7 +56,8 @@ export const Navbar: React.FC = () => {
     activeView,
     setActiveView,
     user,
-    formatPKR
+    formatPKR,
+    storefrontSections
   } = useStore();
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -94,12 +95,27 @@ export const Navbar: React.FC = () => {
   ];
 
   const themes: { id: ThemePreset; name: string; desc: string; preview: string }[] = [
-    { id: 'martfury', name: 'Martfury Yellow', desc: 'Envato signature marketplace', preview: 'bg-[#fcb800]' },
+    { id: 'martfury', name: 'Martfury Yellow', desc: 'Envato signature marketplace', preview: 'bg-gradient-to-tr from-[#0a1730] to-[#1a386b]' },
     { id: 'obsidian', name: 'Cyber Obsidian', desc: 'Midnight slate with electric indigo glow', preview: 'bg-indigo-600' },
     { id: 'titanium', name: 'Titanium Light', desc: 'Crisp porcelain with high-contrast slate', preview: 'bg-slate-200 border border-slate-400' },
     { id: 'cyberpunk', name: 'Neon Cyberpunk', desc: 'Deep violet with magenta & neon glow', preview: 'bg-pink-500' },
     { id: 'emerald', name: 'Emerald FinTech', desc: 'Midnight emerald with luminous mint glow', preview: 'bg-emerald-500' },
   ];
+
+  const navSections = storefrontSections.filter(s => s.enabled && s.showInNavbar);
+
+  const scrollToSection = (sectionId: string) => {
+    if (activeView !== 'storefront') {
+      setActiveView('storefront');
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -126,7 +142,7 @@ export const Navbar: React.FC = () => {
             </span>
             <span className="hidden lg:inline text-slate-500">•</span>
             <span className="hidden lg:inline text-slate-400">
-              Coupon <code className="px-1.5 py-0.5 rounded bg-yellow-400/10 text-[#fcb800] font-mono font-bold border border-yellow-400/20">PLAYBEAT20</code> for 20% OFF
+              Coupon <code className="px-1.5 py-0.5 rounded bg-gradient-to-r from-[#0a1730] to-[#142d56] text-[#fcb800] font-mono font-bold border border-slate-700/60">PLAYBEAT20</code> for 20% OFF
             </span>
           </div>
 
@@ -217,7 +233,7 @@ export const Navbar: React.FC = () => {
             }}
             className="flex items-center gap-2.5 text-left cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#fcb800] to-yellow-300 text-slate-950 flex items-center justify-center font-black text-lg shadow-lg shadow-yellow-500/20 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#0a1730] via-[#112850] to-[#1a386b] border border-slate-700/60 text-[#fcb800] flex items-center justify-center font-black text-lg shadow-lg shadow-black/40 group-hover:scale-105 transition-transform">
               PB
             </div>
             <div>
@@ -225,7 +241,7 @@ export const Navbar: React.FC = () => {
                 <span className="font-black text-lg tracking-tight text-white group-hover:text-[#fcb800] transition-colors">
                   PlayBeat
                 </span>
-                <span className="px-1.5 py-0.2 rounded bg-yellow-400/10 text-[#fcb800] text-[10px] font-black uppercase border border-yellow-400/30">
+                <span className="px-1.5 py-0.2 rounded bg-gradient-to-r from-[#0a1730] to-[#142d56] text-[#fcb800] text-[10px] font-black uppercase border border-slate-700/60">
                   Digital
                 </span>
               </div>
@@ -349,9 +365,9 @@ export const Navbar: React.FC = () => {
           {/* Cart Drawer Trigger */}
           <button
             onClick={() => setIsCartOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-black text-xs cursor-pointer shadow-lg shadow-yellow-500/20 transition-transform active:scale-95"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs cursor-pointer shadow-lg shadow-black/40 transition-transform active:scale-95"
           >
-            <ShoppingCart className="w-4 h-4" />
+            <ShoppingCart className="w-4 h-4 text-[#fcb800]" />
             <span className="font-mono">{cartTotalCount}</span>
           </button>
 
@@ -359,21 +375,62 @@ export const Navbar: React.FC = () => {
 
       </div>
 
+      {/* Mobile Search Row (visible on < md) */}
+      <div className="md:hidden px-4 pb-3 pt-1">
+        <div className="relative flex items-center bg-[#070b14] rounded-2xl border border-slate-700/80 focus-within:border-[#fcb800] transition-colors overflow-hidden">
+          <Search className="w-4 h-4 text-slate-400 ml-3.5 shrink-0" />
+          <input
+            type="text"
+            placeholder="Search 4K Projectors, Windows 11, IPTV, ChatGPT Plus..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setIsSearchOpen(true);
+            }}
+            className="w-full bg-transparent px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="p-1 mr-2 text-slate-400 hover:text-white"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* 3. Secondary Navigation & Mega Menu Bar */}
       <div className="w-full bg-[#070b14] border-t border-slate-800/80 px-4 py-2 relative">
         <div className="max-w-7xl mx-auto flex items-center justify-between text-xs">
           
-          <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto no-scrollbar py-1">
+          <div className="flex items-center gap-3 sm:gap-5 overflow-x-auto no-scrollbar py-1 whitespace-nowrap">
             {/* Mega Menu Toggle */}
             <button
               onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
               onMouseEnter={() => setIsMegaMenuOpen(true)}
-              className="flex items-center gap-2 font-black text-[#fcb800] hover:text-yellow-300 transition-colors cursor-pointer shrink-0"
+              className="flex items-center gap-1.5 font-black text-[#fcb800] hover:text-yellow-300 transition-colors cursor-pointer shrink-0"
             >
               <Menu className="w-4 h-4" />
               <span>ALL CATEGORIES</span>
               <ChevronDown className="w-3 h-3" />
             </button>
+
+            {/* Dynamic Storefront Promotional Sections in Navbar */}
+            {navSections.map(sec => (
+              <button
+                key={sec.id}
+                onClick={() => scrollToSection(sec.id)}
+                className="flex items-center gap-1.5 font-bold text-slate-200 hover:text-[#fcb800] transition-colors cursor-pointer shrink-0"
+              >
+                <span>{sec.navbarLabel || sec.title}</span>
+                {sec.badge && (
+                  <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider bg-red-500/10 text-rose-400 border border-red-500/20">
+                    {sec.badge}
+                  </span>
+                )}
+              </button>
+            ))}
 
             {/* Quick Category links */}
             {[
@@ -392,7 +449,7 @@ export const Navbar: React.FC = () => {
                 className={`font-bold transition-colors cursor-pointer shrink-0 ${
                   selectedCategory === item.slug
                     ? 'text-[#fcb800]'
-                    : 'text-slate-300 hover:text-white'
+                    : 'text-slate-400 hover:text-white'
                 }`}
               >
                 {item.label}
@@ -400,7 +457,7 @@ export const Navbar: React.FC = () => {
             ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-3 shrink-0">
+          <div className="hidden lg:flex items-center gap-3 shrink-0 ml-4">
             <button
               onClick={() => {
                 setActiveView('storefront');
@@ -418,7 +475,7 @@ export const Navbar: React.FC = () => {
               }}
               className={`flex items-center gap-1 text-xs font-bold transition-colors cursor-pointer px-2 py-0.5 rounded-lg border ${
                 activeView === 'admin'
-                  ? 'bg-yellow-400/20 text-[#fcb800] border-yellow-400/40'
+                  ? 'bg-gradient-to-r from-[#0a1730] to-[#142d56] text-[#fcb800] border-slate-700/60'
                   : 'bg-slate-900 text-slate-400 hover:text-white border-slate-800'
               }`}
             >

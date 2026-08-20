@@ -82,9 +82,9 @@ export const InventoryView: React.FC = () => {
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-black text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-yellow-500/20"
+          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-black/40"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-[#fcb800]" />
           <span>Add / Bulk Upload Keys</span>
         </button>
       </div>
@@ -125,7 +125,7 @@ export const InventoryView: React.FC = () => {
               onClick={() => setStatusFilter(s)}
               className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
                 statusFilter === s
-                  ? 'bg-[#fcb800] text-slate-950 shadow-md'
+                  ? 'bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] text-white border border-slate-700/60 shadow-md'
                   : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
               }`}
             >
@@ -231,7 +231,7 @@ export const InventoryView: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-xl bg-[#fcb800] text-slate-950 font-black text-xs cursor-pointer shadow-md"
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs cursor-pointer shadow-md"
             >
               Deposit Keys into Vault
             </button>

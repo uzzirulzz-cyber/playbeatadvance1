@@ -55,7 +55,7 @@ export const ProductsView: React.FC = () => {
   const [formStock, setFormStock] = useState(25);
   const [formSku, setFormSku] = useState('PB-HY300-PLUS');
   const [formImageUrl, setFormImageUrl] = useState('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80');
-  const [formSourceUrl, setFormSourceUrl] = useState('https://www.zerobyte.store/products/hy300-plus');
+  const [formSourceUrl, setFormSourceUrl] = useState('https://playbeat.digital/products/magcubic-hy300-pro');
   
   // Specs form
   const [formResolution, setFormResolution] = useState('Native 720P / 4K Decoded');
@@ -63,6 +63,20 @@ export const ProductsView: React.FC = () => {
   const [formOS, setFormOS] = useState('Android 11 Smart System');
   const [formBattery, setFormBattery] = useState('No (AC Power)');
   const [formWarranty, setFormWarranty] = useState('1 Year Official Warranty');
+
+  const handleApplyTenPercentMarkup = () => {
+    products.forEach(p => {
+      const newPrice = Math.round(p.price * 1.1);
+      const newCost = p.costPrice || Math.round(p.price * 0.7);
+      const newProfit = Math.max(0, newPrice - newCost);
+      updateProduct(p.id, {
+        price: newPrice,
+        profit: newProfit
+      });
+    });
+    setSyncToast('Applied +10% price markup across entire product catalog!');
+    setTimeout(() => setSyncToast(null), 4000);
+  };
 
   const filtered = products.filter(p => {
     const matchesSearch = 
@@ -103,7 +117,7 @@ export const ProductsView: React.FC = () => {
     setFormStock(25);
     setFormSku(`PB-${Date.now().toString().slice(-6)}`);
     setFormImageUrl('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80');
-    setFormSourceUrl('https://www.zerobyte.store/products/');
+    setFormSourceUrl('https://playbeat.digital/products/');
     setIsAddModalOpen(true);
   };
 
@@ -138,7 +152,7 @@ export const ProductsView: React.FC = () => {
     const productPayload = {
       title: formTitle.trim(),
       slug: formTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      shortDescription: formShortDesc || 'Verified genuine hardware & digital product from ZeroByte / PlayBeat.',
+      shortDescription: formShortDesc || 'Verified genuine hardware & digital product from PlayBeat Digital.',
       description: `${formTitle.trim()} - Premium quality, 1-year replacement warranty, with fast nationwide delivery in Pakistan.`,
       type: formType,
       status: 'PUBLISHED' as const,
@@ -156,7 +170,7 @@ export const ProductsView: React.FC = () => {
         colors: ['#0f172a', '#fcb800'],
         icon: formType === 'HARDWARE' ? 'Projector' : 'Sparkles'
       },
-      tags: [formType === 'HARDWARE' ? 'Projector' : 'Digital', 'ZeroByte', 'Official'],
+      tags: [formType === 'HARDWARE' ? 'Projector' : 'Digital', 'PlayBeat', 'Official'],
       licenseType: formType === 'HARDWARE' ? 'Pakistan Physical Courier Delivery' : 'Instant Automated Key Vault Dispatch',
       version: 'v2026.1',
       featured: true,
@@ -168,9 +182,9 @@ export const ProductsView: React.FC = () => {
         'Warranty': formWarranty
       },
       vendor: {
-        id: 'v-zerobyte',
-        storeName: 'ZeroByte / PlayBeat Store',
-        slug: 'zerobyte-store',
+        id: 'v-playbeat',
+        storeName: 'PlayBeat Digital Official',
+        slug: 'playbeat-official',
         verified: true,
         rating: 5.0,
         salesCount: 1420
@@ -211,11 +225,20 @@ export const ProductsView: React.FC = () => {
             <span>Product Catalog & Cost Manager ({products.length} items)</span>
           </h2>
           <p className="text-xs text-slate-400">
-            Manage ZeroByte cinema projectors, software licenses, wholesale cost prices, images, and live store inventory.
+            Manage PlayBeat cinema projectors, digital licenses, wholesale cost prices, images, and live store inventory.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <button
+            onClick={handleApplyTenPercentMarkup}
+            title="Apply 10% price markup to all products"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold transition-all border border-amber-500/40 cursor-pointer"
+          >
+            <DollarSign className="w-3.5 h-3.5 text-[#fcb800]" />
+            <span>+10% Markup to All</span>
+          </button>
+
           <button
             onClick={handleSyncDatabase}
             disabled={syncLoading}
@@ -227,9 +250,9 @@ export const ProductsView: React.FC = () => {
 
           <button
             onClick={handleOpenCreate}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 text-xs font-black transition-all shadow-lg shadow-yellow-500/20 cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 text-xs font-black transition-all shadow-lg shadow-black/40 cursor-pointer"
           >
-            <Plus className="w-4 h-4 stroke-[2.5]" />
+            <Plus className="w-4 h-4 stroke-[2.5] text-[#fcb800]" />
             <span>Add New Product</span>
           </button>
         </div>
@@ -319,7 +342,7 @@ export const ProductsView: React.FC = () => {
                                 rel="noopener noreferrer"
                                 className="text-yellow-400 hover:underline flex items-center gap-0.5"
                               >
-                                <span>ZeroByte</span>
+                                <span>playbeat.digital</span>
                                 <ExternalLink className="w-2.5 h-2.5" />
                               </a>
                             )}
@@ -500,12 +523,12 @@ export const ProductsView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">Source URL (zerobyte.store)</label>
+                  <label className="block text-slate-300 font-bold mb-1">Source URL (playbeat.digital)</label>
                   <input
                     type="url"
                     value={formSourceUrl}
                     onChange={(e) => setFormSourceUrl(e.target.value)}
-                    placeholder="https://www.zerobyte.store/products/..."
+                    placeholder="https://playbeat.digital/products/..."
                     className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500"
                   />
                 </div>
@@ -586,9 +609,9 @@ export const ProductsView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-black flex items-center gap-1.5 shadow-lg shadow-yellow-500/20 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black flex items-center gap-1.5 shadow-lg shadow-black/40 cursor-pointer"
                 >
-                  <Check className="w-4 h-4 stroke-[2.5]" />
+                  <Check className="w-4 h-4 stroke-[2.5] text-[#fcb800]" />
                   <span>{editingProduct ? 'Update Product' : 'Create Product'}</span>
                 </button>
               </div>

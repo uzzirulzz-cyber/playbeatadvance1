@@ -136,7 +136,7 @@ export const ProductDetailModal: React.FC = () => {
               {/* Status Badge */}
               <div className="absolute top-3 left-3">
                 <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/70 backdrop-blur-md text-[#fcb800] border border-yellow-500/30">
-                  {isHardware ? 'ZeroByte 4K Projector' : 'Instant Key Delivery'}
+                  {isHardware ? 'PlayBeat 4K Projector' : 'Instant Key Delivery'}
                 </span>
               </div>
             </div>
@@ -192,7 +192,7 @@ export const ProductDetailModal: React.FC = () => {
                     onClick={() => setSelectedVariant(v)}
                     className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
                       currentVariant.id === v.id
-                        ? 'bg-yellow-400/10 border-[#fcb800] text-white shadow-md'
+                        ? 'bg-gradient-to-r from-[#0a1730] to-[#142d56] border-[#fcb800] text-white shadow-md'
                         : 'bg-[#070b14] border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
@@ -245,9 +245,9 @@ export const ProductDetailModal: React.FC = () => {
 
                 <button
                   onClick={handleInstantBuy}
-                  className="flex-1 py-3 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-yellow-500/20 cursor-pointer transition-all active:scale-95"
+                  className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-black/40 cursor-pointer transition-all active:scale-95"
                 >
-                  <Zap className="w-4 h-4" />
+                  <Zap className="w-4 h-4 text-[#fcb800]" />
                   <span>Buy Now (Instant Key)</span>
                 </button>
               </div>
@@ -281,7 +281,7 @@ export const ProductDetailModal: React.FC = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-[#fcb800] text-slate-950 font-black'
+                    ? 'bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] text-white border border-slate-700/60 font-black'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -348,7 +348,7 @@ export const ProductDetailModal: React.FC = () => {
                   },
                   {
                     q: 'How does the hardware projector warranty work?',
-                    a: 'All ZeroByte Smart Cinema Projectors come with an official 1-Year PlayBeat replacement warranty and free courier dispatch across all major cities in Pakistan.'
+                    a: 'All PlayBeat Smart Cinema Projectors come with an official 1-Year PlayBeat replacement warranty and free courier dispatch across all major cities in Pakistan.'
                   }
                 ].map((item, idx) => (
                   <div key={idx} className="p-3.5 rounded-xl bg-[#070b14] border border-slate-800 space-y-1">
@@ -403,7 +403,7 @@ export const ProductDetailModal: React.FC = () => {
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-[#fcb800] text-slate-950 font-black text-xs cursor-pointer shadow-md"
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs cursor-pointer shadow-md"
                   >
                     Submit Review
                   </button>

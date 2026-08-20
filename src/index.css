@@ -10,7 +10,7 @@
   body {
     font-family: var(--font-sans);
     overflow-x: hidden;
-    background: linear-gradient(180deg, #f7f4ee 0%, #f3f6fb 100%);
+    background: linear-gradient(180deg, #f2f4f7 0%, #ebeef3 60%, #e6e9ef 97%, #faeded 100%);
     color: #10233d;
   }
 
@@ -133,9 +133,18 @@
   box-shadow: 0 0 20px var(--accent-glow);
 }
 
-/* Martfury Signature Accent Colors */
+/* Martfury Signature Accent Colors (Navy Gradient 3% Silver for backgrounds, keeping text/border colors) */
+.bg-grey-red-gradient {
+  background: linear-gradient(180deg, #f3f4f6 0%, #e9ebf0 60%, #e4e7ed 97%, #faebeb 100%);
+}
+.bg-navy-silver-gradient {
+  background: linear-gradient(135deg, #08152c 0%, #0f254b 60%, #17376c 97%, #d9e2ec 100%);
+}
+.bg-navy-gradient {
+  background: linear-gradient(135deg, #0a1730 0%, #112850 60%, #1a386b 97%, #dce4ee 100%);
+}
 .bg-martfury-yellow {
-  background-color: #fcb800;
+  background: linear-gradient(135deg, #08152c 0%, #0f254b 60%, #17376c 97%, #d9e2ec 100%);
 }
 .text-martfury-yellow {
   color: #fcb800;
@@ -144,7 +153,7 @@
   border-color: #fcb800;
 }
 .hover\:bg-martfury-dark:hover {
-  background-color: #e5a700;
+  background: linear-gradient(135deg, #0a1c3b 0%, #143060 60%, #1e4585 97%, #e2eaf5 100%);
 }
 
 /* Custom Sleek Scrollbar */

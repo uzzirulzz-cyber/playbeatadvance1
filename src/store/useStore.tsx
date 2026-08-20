@@ -20,6 +20,7 @@ import {
   ProductVariant
 } from '../types';
 import { INITIAL_PRODUCTS, INITIAL_CATEGORIES, INITIAL_COUPONS, INITIAL_NOTIFICATIONS, DEMO_USER } from '../data/initialData';
+import { StorefrontSection, DEFAULT_STOREFRONT_SECTIONS } from '../data/defaultSections';
 import { generateLicenseKey, generateOrderNumber, formatCurrency, formatPKR } from '../lib/utils';
 import confetti from 'canvas-confetti';
 
@@ -152,7 +153,7 @@ const INITIAL_AUDIT_LOGS: AuditLog[] = [
     action: 'CATALOG_SYNC',
     targetType: 'PRODUCT',
     targetId: 'MongoDB Atlas',
-    details: 'Synchronized 8 ZeroByte verified cinema projectors and software keys.',
+    details: 'Synchronized PlayBeat verified cinema projectors and software keys.',
     timestamp: '2026-08-18T12:00:00Z',
     ipAddress: '127.0.0.1'
   }
@@ -265,6 +266,16 @@ interface StoreContextType {
   deleteInventoryKey: (id: string) => void;
   updateUserWallet: (userId: string, amount: number, action: 'CREDIT' | 'DEBIT', reason?: string) => void;
   updateStoreSettings: (newSettings: Partial<StoreSettings>) => void;
+
+  // Storefront Sections Management
+  storefrontSections: StorefrontSection[];
+  toggleStorefrontSection: (id: string) => void;
+  toggleNavbarSection: (id: string) => void;
+  updateStorefrontSection: (id: string, updates: Partial<StorefrontSection>) => void;
+  addStorefrontSection: (section: Omit<StorefrontSection, 'id'>) => void;
+  deleteStorefrontSection: (id: string) => void;
+  reorderStorefrontSections: (startIndex: number, endIndex: number) => void;
+  resetStorefrontSections: () => void;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -349,6 +360,69 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const saved = localStorage.getItem('playbeat_store_settings');
     return saved ? JSON.parse(saved) : DEFAULT_STORE_SETTINGS;
   });
+
+  const [storefrontSections, setStorefrontSections] = useState<StorefrontSection[]>(() => {
+    const saved = localStorage.getItem('playbeat_storefront_sections_v2');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return DEFAULT_STOREFRONT_SECTIONS;
+  });
+
+  const saveSections = (newSections: StorefrontSection[]) => {
+    setStorefrontSections(newSections);
+    try {
+      localStorage.setItem('playbeat_storefront_sections_v2', JSON.stringify(newSections));
+      window.dispatchEvent(new Event('sections_updated'));
+    } catch (e) {}
+  };
+
+  const toggleStorefrontSection = (id: string) => {
+    const updated = storefrontSections.map(s => s.id === id ? { ...s, enabled: !s.enabled } : s);
+    saveSections(updated);
+  };
+
+  const toggleNavbarSection = (id: string) => {
+    const updated = storefrontSections.map(s => s.id === id ? { ...s, showInNavbar: !s.showInNavbar } : s);
+    saveSections(updated);
+  };
+
+  const updateStorefrontSection = (id: string, updates: Partial<StorefrontSection>) => {
+    const updated = storefrontSections.map(s => s.id === id ? { ...s, ...updates } : s);
+    saveSections(updated);
+  };
+
+  const addStorefrontSection = (sectionData: Omit<StorefrontSection, 'id'>) => {
+    const newSection: StorefrontSection = {
+      ...sectionData,
+      id: `custom-${Date.now()}`,
+      order: storefrontSections.length + 1,
+      isCustom: true
+    };
+    saveSections([...storefrontSections, newSection]);
+  };
+
+  const deleteStorefrontSection = (id: string) => {
+    const updated = storefrontSections.filter(s => s.id !== id);
+    saveSections(updated);
+  };
+
+  const reorderStorefrontSections = (startIndex: number, endIndex: number) => {
+    const result: StorefrontSection[] = [...storefrontSections];
+    const [removed] = result.splice(startIndex, 1);
+    if (removed) {
+      result.splice(endIndex, 0, removed);
+      const reindexed: StorefrontSection[] = result.map((item, idx) => ({ ...item, order: idx + 1 }));
+      saveSections(reindexed);
+    }
+  };
+
+  const resetStorefrontSections = () => {
+    saveSections(DEFAULT_STOREFRONT_SECTIONS);
+  };
 
   const getInitialView = (): ActiveView => {
     if (typeof window !== 'undefined') {
@@ -680,7 +754,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         unitPrice: item.selectedVariant?.price ?? item.product.discountPrice ?? item.product.price,
         licenseKeys: keys,
         instructions: isHW 
-          ? 'ZeroByte projector dispatched via TCS courier in 24-48 hours with official 1-year warranty card.' 
+          ? 'PlayBeat projector dispatched via TCS courier in 24-48 hours with official 1-year warranty card.' 
           : 'Instant automated license activation. Enter this code into your official software/streaming portal.'
       };
     });
@@ -991,7 +1065,15 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         addInventoryKey,
         deleteInventoryKey,
         updateUserWallet,
-        updateStoreSettings
+        updateStoreSettings,
+        storefrontSections,
+        toggleStorefrontSection,
+        toggleNavbarSection,
+        updateStorefrontSection,
+        addStorefrontSection,
+        deleteStorefrontSection,
+        reorderStorefrontSections,
+        resetStorefrontSections
       }}
     >
       {children}

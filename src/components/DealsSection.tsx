@@ -21,12 +21,24 @@ export const DealsSection: React.FC = () => {
     toggleFavorite, 
     isFavorite, 
     setSelectedProduct, 
-    formatPKR 
+    formatPKR,
+    storefrontSections 
   } = useStore();
+
+  const sectionConfig = storefrontSections.find(s => s.id === 'deals');
+
+  if (sectionConfig && !sectionConfig.enabled) {
+    return null;
+  }
+
+  const title = sectionConfig?.title || 'Flash Deals & Special Offers';
+  const subtitle = sectionConfig?.subtitle || 'Limited-time discounts on genuine software licenses, IPTV passes and 4K cinema projectors.';
+  const initialHours = sectionConfig?.countdownHours || 14;
+  const itemLimit = sectionConfig?.itemLimit || 4;
 
   // Countdown timer state
   const [timeLeft, setTimeLeft] = useState({
-    hours: 14,
+    hours: initialHours,
     minutes: 32,
     seconds: 45
   });
@@ -48,12 +60,15 @@ export const DealsSection: React.FC = () => {
   }, []);
 
   // Filter deal products
-  const dealProducts = products.filter(p => (p.discountPrice && p.discountPrice < p.price) || p.featured).slice(0, 4);
+  let dealProducts = products.filter(p => (p.discountPrice && p.discountPrice < p.price) || p.featured).slice(0, itemLimit);
+  if (dealProducts.length === 0) {
+    dealProducts = products.slice(0, itemLimit);
+  }
 
   if (dealProducts.length === 0) return null;
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 py-8">
+    <section id="deals" className="w-full max-w-7xl mx-auto px-4 py-8 scroll-mt-24">
       <div className="bg-gradient-to-r from-[#070b14] via-[#0f172a] to-[#070b14] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
         
         {/* Background glow */}
@@ -67,11 +82,11 @@ export const DealsSection: React.FC = () => {
                 <Flame className="w-4 h-4" />
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                Flash Deals & Special Offers
+                {title}
               </h2>
             </div>
             <p className="text-xs text-slate-400">
-              Limited-time discounts on genuine software licenses and ZeroByte 4K cinema projectors.
+              {subtitle}
             </p>
           </div>
 

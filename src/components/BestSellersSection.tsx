@@ -4,33 +4,43 @@ import { Crown, Award } from 'lucide-react';
 import { ProductCard } from './ProductCard';
 
 export const BestSellersSection: React.FC = () => {
-  const { products } = useStore();
+  const { products, storefrontSections } = useStore();
+  const sectionConfig = storefrontSections.find(s => s.id === 'bestsellers');
+
+  if (sectionConfig && !sectionConfig.enabled) {
+    return null;
+  }
+
+  const title = sectionConfig?.title || 'Best Sellers';
+  const subtitle = sectionConfig?.subtitle || 'Voted by thousands of satisfied customers with verified instant delivery';
+  const badge = sectionConfig?.badge || 'TOP RANKED';
+  const itemLimit = sectionConfig?.itemLimit || 8;
 
   const bestSellers = useMemo(() => {
     return products
       .filter(p => p.salesCount > 0)
       .sort((a, b) => b.salesCount - a.salesCount)
-      .slice(0, 8);
-  }, [products]);
+      .slice(0, itemLimit);
+  }, [products, itemLimit]);
 
   return (
-    <section className="py-20 px-4 sm:px-6 max-w-7xl mx-auto bg-transparent">
+    <section id="bestsellers" className="py-12 px-4 sm:px-6 max-w-7xl mx-auto bg-transparent scroll-mt-24">
       {/* Section Header */}
-      <div className="flex items-end justify-between gap-4 mb-10">
-        <div className="space-y-3">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+        <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[#fff7e6] border border-[#e4d3a7] shadow-[0_12px_24px_rgba(16,35,61,0.04)]">
-              <Crown className="w-5 h-5 text-[#d7a53a]" />
+            <div className="p-2.5 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-[#fcb800]">
+              <Crown className="w-5 h-5" />
             </div>
-            <span className="text-[11px] font-black uppercase tracking-[0.22em] text-[#58687c]">
-              Popular
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-yellow-500/10 border border-yellow-500/30 text-[#fcb800]">
+              {badge}
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-[#10233d] tracking-[-0.05em] leading-none">
-            Best Sellers
+          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-[-0.03em] leading-tight">
+            {title}
           </h2>
-          <p className="text-sm text-[#58687c] max-w-xl">
-            Voted by thousands of satisfied customers
+          <p className="text-xs sm:text-sm text-slate-400 max-w-xl">
+            {subtitle}
           </p>
         </div>
       </div>

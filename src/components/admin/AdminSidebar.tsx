@@ -1,4 +1,5 @@
 import React from 'react';
+import { useStore } from '../../store/useStore';
 import { 
   LayoutDashboard, 
   BarChart3, 
@@ -23,12 +24,15 @@ import {
   Layout,
   Key,
   ShieldCheck,
-  Sliders
+  Sliders,
+  Layers,
+  ExternalLink
 } from 'lucide-react';
 
 export type AdminTab = 
   | 'dashboard'
   | 'builder'
+  | 'sections'
   | 'analytics'
   | 'products'
   | 'inventory'
@@ -60,12 +64,15 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   setActiveTab,
   onLogout
 }) => {
+  const { setActiveView } = useStore();
+
   const sections = [
     {
       title: 'OVERVIEW',
       items: [
         { id: 'dashboard' as AdminTab, label: 'Dashboard', icon: LayoutDashboard },
         { id: 'builder' as AdminTab, label: 'Website Builder CMS', icon: Layout },
+        { id: 'sections' as AdminTab, label: 'Storefront & Nav Sections', icon: Layers },
         { id: 'analytics' as AdminTab, label: 'Analytics & Traffic', icon: BarChart3 },
       ]
     },
@@ -119,7 +126,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       <div className="p-4 space-y-6 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-2 py-1">
-          <div className="w-8 h-8 rounded-xl bg-[#fcb800] text-slate-950 font-black flex items-center justify-center shadow-lg shadow-yellow-500/20 text-sm">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#0a1730] via-[#112850] to-[#1a386b] border border-slate-700/60 text-[#fcb800] font-black flex items-center justify-center shadow-lg shadow-black/40 text-sm">
             PB
           </div>
           <div>
@@ -148,16 +155,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                       onClick={() => setActiveTab(item.id)}
                       className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer ${
                         isActive
-                          ? 'bg-[#fcb800] text-slate-950 shadow-md font-black'
+                          ? 'bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] text-white border border-slate-700/60 shadow-md shadow-black/40 font-black'
                           : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className={`w-4 h-4 ${isActive ? 'text-slate-950' : 'text-slate-400'}`} />
+                        <Icon className={`w-4 h-4 ${isActive ? 'text-[#fcb800]' : 'text-slate-400'}`} />
                         <span>{item.label}</span>
                       </div>
                       {isActive && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#fcb800]" />
                       )}
                     </button>
                   );
@@ -168,8 +175,19 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
         </nav>
       </div>
 
-      {/* Footer / Logout */}
-      <div className="p-4 border-t border-slate-800 bg-[#05080e]">
+      {/* Footer / View Store & Logout */}
+      <div className="p-4 border-t border-slate-800 bg-[#05080e] space-y-2">
+        <button
+          onClick={() => setActiveView('storefront')}
+          className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-[#fcb800] hover:bg-slate-900 border border-slate-800 transition-colors cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <ExternalLink className="w-4 h-4" />
+            <span>View Public Store</span>
+          </div>
+          <span className="text-[10px] text-slate-400">Live</span>
+        </button>
+
         <button
           onClick={onLogout}
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-red-400 hover:text-red-300 hover:bg-red-950/30 transition-colors cursor-pointer"

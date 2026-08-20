@@ -105,7 +105,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             </span>
           )}
           {product.featured && (
-            <span className="px-2 py-0.5 rounded-lg bg-[#FFD21F] text-[#0B1F3A] font-extrabold text-[10px] uppercase tracking-wider shadow-md">
+            <span className="px-2 py-0.5 rounded-lg bg-gradient-to-r from-[#0a1730] to-[#142d56] text-[#fcb800] border border-slate-700/60 font-extrabold text-[10px] uppercase tracking-wider shadow-md">
               ★ TOP
             </span>
           )}
@@ -189,7 +189,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
               onClick={handleAddToCart}
               className={`p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                 addedAnim 
-                  ? 'bg-[#d7a53a] border-[#d7a53a] text-[#10233d]' 
+                  ? 'bg-gradient-to-r from-[#0a1730] to-[#142d56] border-slate-700/60 text-[#fcb800]' 
                   : 'bg-[#10233d] hover:bg-[#132d4d] border-[#10233d] text-white'
               }`}
               title="Add to Cart"
@@ -199,7 +199,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 
             <button
               onClick={handleQuickBuy}
-              className="px-3 py-2 rounded-xl bg-[#d7a53a] hover:bg-[#c9952a] text-[#10233d] font-black text-xs shadow-[0_10px_20px_rgba(215,165,58,0.22)] transition-all cursor-pointer flex items-center gap-1"
+              className="px-3 py-2 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs shadow-md shadow-black/30 transition-all cursor-pointer flex items-center gap-1"
             >
               <span>Buy</span>
             </button>

@@ -34,8 +34,8 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose }) => {
       slug: 'smart-projectors',
       name: 'Smart Projectors',
       icon: Tv,
-      badge: 'ZeroByte 4K',
-      sub: ['Magcubic HY300 Pro', 'Magcubic HY300 PRO Plus', 'Magcubic HY320 Mini', 'Magcubic HY350 Max 4K', 'ZeroByte HM103-A']
+      badge: 'PlayBeat 4K',
+      sub: ['Magcubic HY300 Pro', 'Magcubic HY300 PRO Plus', 'Magcubic HY320 Mini', 'Magcubic HY350 Max 4K', 'HM103-A Ultra Bright']
     },
     {
       id: 'cat-software',
@@ -125,7 +125,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose }) => {
               Featured Deals
             </span>
             <span className="text-xs text-slate-300">
-              ZeroByte Cinema Smart Projectors with 1-Year TCS Courier Dispatch Guarantee
+              PlayBeat Cinema Smart Projectors with 1-Year TCS Courier Dispatch Guarantee
             </span>
           </div>
 

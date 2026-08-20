@@ -149,7 +149,7 @@ export const CustomerDashboard: React.FC = () => {
               <div className="min-w-0">
                 <h3 className="font-bold text-white text-sm truncate">{user.name}</h3>
                 <p className="text-xs text-slate-400 truncate">{user.email}</p>
-                <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-yellow-400/10 text-[#fcb800] border border-yellow-400/20">
+                <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-gradient-to-r from-[#0a1730] to-[#142d56] text-[#fcb800] border border-slate-700/60">
                   Verified Member
                 </span>
               </div>
@@ -188,7 +188,7 @@ export const CustomerDashboard: React.FC = () => {
                     }}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-bold transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-[#fcb800] text-slate-950 shadow-md shadow-yellow-500/20'
+                        ? 'bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] text-white border border-slate-700/60 shadow-md shadow-black/40'
                         : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
                     }`}
                   >
@@ -531,7 +531,7 @@ export const CustomerDashboard: React.FC = () => {
                       onClick={() => setTopupAmount(amt)}
                       className={`py-2 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer ${
                         topupAmount === amt
-                          ? 'bg-[#fcb800] text-slate-950 border-[#fcb800]'
+                          ? 'bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] text-white border-slate-700/60'
                           : 'bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700'
                       }`}
                     >
@@ -549,7 +549,7 @@ export const CustomerDashboard: React.FC = () => {
                   />
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-black text-xs transition-all shadow-lg shadow-yellow-500/20 cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black text-xs transition-all shadow-lg shadow-black/40 cursor-pointer"
                   >
                     Top Up Now
                   </button>

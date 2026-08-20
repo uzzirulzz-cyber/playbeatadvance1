@@ -117,9 +117,9 @@ export const JazzCashView: React.FC = () => {
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+                  className="px-4 py-2 bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
                 >
-                  <Search className="w-3.5 h-3.5" />
+                  <Search className="w-3.5 h-3.5 text-[#fcb800]" />
                   <span>Query</span>
                 </button>
               </div>

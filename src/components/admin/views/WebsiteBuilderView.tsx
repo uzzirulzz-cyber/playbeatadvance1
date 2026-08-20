@@ -20,12 +20,25 @@ import {
   ToggleLeft,
   ToggleRight,
   ExternalLink,
-  Plus
+  Plus,
+  Layers,
+  Navigation,
+  Flame,
+  Clock,
+  TrendingUp,
+  Crown
 } from 'lucide-react';
 import { ThemePreset } from '../../../types';
 
 export const WebsiteBuilderView: React.FC = () => {
-  const { themePreset, setThemePreset, setActiveView } = useStore();
+  const { 
+    themePreset, 
+    setThemePreset, 
+    setActiveView,
+    storefrontSections,
+    toggleStorefrontSection,
+    toggleNavbarSection
+  } = useStore();
 
   // Section visibility states
   const [sections, setSections] = useState({
@@ -43,7 +56,7 @@ export const WebsiteBuilderView: React.FC = () => {
   const [announcementText, setAnnouncementText] = useState('Welcome to PlayBeat Digital (playbeat.digital) — Instant Delivery');
   const [promoCode, setPromoCode] = useState('PLAYBEAT20');
   const [heroHeading, setHeroHeading] = useState('Next-Gen Digital Goods & 4K Cinema Projectors');
-  const [heroSubheading, setHeroSubheading] = useState('Buy official Windows 11 Pro, Office 2024, ChatGPT Plus, IPTV 4K passes, and ZeroByte Android 11 smart projectors with instant dispatch across Pakistan.');
+  const [heroSubheading, setHeroSubheading] = useState('Buy official Windows 11 Pro, Office 2024, ChatGPT Plus, IPTV 4K passes, and PlayBeat Android 11 smart projectors with instant dispatch across Pakistan.');
   const [whatsappPhone, setWhatsappPhone] = useState('+923321029333');
   const [customCss, setCustomCss] = useState('/* Custom Storefront CSS overrides */\n.theme-martfury { --primary: #fcb800; }');
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -138,9 +151,9 @@ export const WebsiteBuilderView: React.FC = () => {
 
           <button
             onClick={handleSaveConfig}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 text-xs font-black transition-all shadow-lg shadow-yellow-500/20 cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 text-xs font-black transition-all shadow-lg shadow-black/40 cursor-pointer"
           >
-            <Save className="w-3.5 h-3.5" />
+            <Save className="w-3.5 h-3.5 text-[#fcb800]" />
             <span>Save & Publish</span>
           </button>
         </div>
@@ -158,6 +171,68 @@ export const WebsiteBuilderView: React.FC = () => {
         
         {/* Left Col (7 cols): Layout Sections Builder */}
         <div className="lg:col-span-7 space-y-6">
+          
+          {/* Promotional Sections & Navbar Sync Manager */}
+          <div className="bg-[#11192e]/90 border border-slate-800/80 rounded-2xl p-5 space-y-4 shadow-lg">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-[#fcb800]" />
+                  <span>Promotional Storefront & Navbar Sections</span>
+                </h3>
+                <p className="text-xs text-slate-400">Quickly toggle display on the homepage or top navigation bar.</p>
+              </div>
+            </div>
+
+            <div className="space-y-2.5">
+              {storefrontSections.map((sec) => (
+                <div
+                  key={sec.id}
+                  className="flex items-center justify-between p-3 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-colors"
+                >
+                  <div className="space-y-0.5 min-w-0 pr-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-white truncate">{sec.title}</span>
+                      {sec.badge && (
+                        <span className="px-2 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider bg-gradient-to-r from-[#0a1730] to-[#142d56] text-[#fcb800] border border-slate-700/60">
+                          {sec.badge}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-slate-400 line-clamp-1">{sec.subtitle}</div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => toggleNavbarSection(sec.id)}
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-colors cursor-pointer ${
+                        sec.showInNavbar
+                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                          : 'bg-slate-950 border-slate-800 text-slate-500'
+                      }`}
+                      title="Toggle in Navbar"
+                    >
+                      <Navigation className="w-3 h-3 inline mr-1" />
+                      {sec.showInNavbar ? 'In Nav' : 'No Nav'}
+                    </button>
+
+                    <button
+                      onClick={() => toggleStorefrontSection(sec.id)}
+                      className="cursor-pointer text-xl p-1 transition-transform active:scale-95"
+                      title="Toggle on Storefront"
+                    >
+                      {sec.enabled ? (
+                        <ToggleRight className="w-7 h-7 text-[#fcb800]" />
+                      ) : (
+                        <ToggleLeft className="w-7 h-7 text-slate-600" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="bg-[#11192e]/90 border border-slate-800/80 rounded-2xl p-5 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
@@ -173,7 +248,7 @@ export const WebsiteBuilderView: React.FC = () => {
               {[
                 { key: 'announcementBar' as const, label: 'Top Announcement & Micro-Utility Bar', desc: 'Promo coupon alerts, currency switcher, and phone badge' },
                 { key: 'heroSpotlight' as const, label: 'Dynamic Hero Showcase & Search Spotlight', desc: 'Main headline, quick tag filters, and value proposition' },
-                { key: 'smartProjectors' as const, label: 'ZeroByte 4K Cinema Projectors Showcase', desc: '8 verified cinema projectors with wholesale cost & retail pricing' },
+                { key: 'smartProjectors' as const, label: 'PlayBeat 4K Cinema Projectors Showcase', desc: '8 verified cinema projectors with wholesale cost & retail pricing' },
                 { key: 'categoryFilterBar' as const, label: 'Category Slider & Marketplace Filters', desc: 'Interactive category selector, type badges, and sorting pills' },
                 { key: 'trustBadges' as const, label: 'Trust & Verification Guarantee Badges', desc: '24/7 delivery, replacement warranty, and official licensing chips' },
                 { key: 'whatsappWidget' as const, label: 'Floating WhatsApp Direct Support Widget', desc: 'Interactive floating chat button (+923321029333)' },
@@ -301,7 +376,7 @@ export const WebsiteBuilderView: React.FC = () => {
                     </div>
 
                     {themePreset === th.id && (
-                      <span className="px-2 py-0.5 rounded-md bg-[#fcb800] text-slate-950 text-[10px] font-black uppercase tracking-wider">
+                      <span className="px-2 py-0.5 rounded-md bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] text-[#fcb800] border border-slate-700/60 text-[10px] font-black uppercase tracking-wider">
                         Active
                       </span>
                     )}

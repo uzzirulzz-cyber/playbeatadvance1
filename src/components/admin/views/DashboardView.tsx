@@ -523,7 +523,7 @@ export const DashboardView: React.FC = () => {
             {products.slice(0, 5).map((prod) => (
               <div key={prod.id} className="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/50 border border-slate-800/70 hover:border-slate-700 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-[#fcb800] font-black text-xs shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-gradient-to-r from-[#0a1730] to-[#142d56] border border-slate-700/60 flex items-center justify-center text-[#fcb800] font-black text-xs shrink-0">
                     {prod.type === 'HARDWARE' ? '4K' : prod.type === 'STREAMING' ? 'TV' : 'AI'}
                   </div>
                   <div>

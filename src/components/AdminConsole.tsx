@@ -4,6 +4,7 @@ import { AdminSidebar, AdminTab } from './admin/AdminSidebar';
 import { AdminHeader } from './admin/AdminHeader';
 import { DashboardView } from './admin/views/DashboardView';
 import { WebsiteBuilderView } from './admin/views/WebsiteBuilderView';
+import { StorefrontSectionsView } from './admin/views/StorefrontSectionsView';
 import { AnalyticsView } from './admin/views/AnalyticsView';
 import { ProductsView } from './admin/views/ProductsView';
 import { InventoryView } from './admin/views/InventoryView';
@@ -40,7 +41,8 @@ export const AdminConsole: React.FC = () => {
     isAdminAuthenticated, 
     adminLogin, 
     adminLogout,
-    setActiveView 
+    setActiveView,
+    resetStorefrontSections
   } = useStore();
 
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
@@ -82,8 +84,9 @@ export const AdminConsole: React.FC = () => {
   const handleResetAll = () => {
     setAdminSearch('');
     setActiveTab('dashboard');
+    resetStorefrontSections();
     setResetToast(true);
-    setTimeout(() => setResetToast(false), 2500);
+    setTimeout(() => setResetToast(false), 3000);
   };
 
   // If user is not authenticated, show Admin Login gate
@@ -97,7 +100,7 @@ export const AdminConsole: React.FC = () => {
 
           {/* Header */}
           <div className="text-center space-y-2 relative">
-            <div className="w-14 h-14 rounded-2xl bg-[#fcb800] text-slate-950 font-black mx-auto flex items-center justify-center shadow-lg shadow-yellow-500/20 text-2xl">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#0a1730] via-[#112850] to-[#1a386b] border border-slate-700/60 text-[#fcb800] font-black mx-auto flex items-center justify-center shadow-lg shadow-black/40 text-2xl">
               PB
             </div>
             <h1 className="text-2xl font-black tracking-tight text-white pt-2">
@@ -155,9 +158,9 @@ export const AdminConsole: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-xl bg-[#fcb800] hover:bg-[#e5a700] text-slate-950 font-black transition-all shadow-lg shadow-yellow-500/20 cursor-pointer flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] hover:from-[#0d1e3d] hover:to-[#224480] text-white border border-slate-700/60 font-black transition-all shadow-lg shadow-black/40 cursor-pointer flex items-center justify-center gap-2"
             >
-              <Lock className="w-4 h-4" />
+              <Lock className="w-4 h-4 text-[#fcb800]" />
               <span>Log in to Admin Panel</span>
             </button>
           </form>
@@ -180,8 +183,8 @@ export const AdminConsole: React.FC = () => {
     <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col">
       {/* Toast */}
       {resetToast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#fcb800] text-slate-950 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-black animate-in fade-in">
-          <RotateCcw className="w-4 h-4 animate-spin" />
+        <div className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#0a1730] via-[#112850] to-[#1a386b] text-white border border-slate-700/60 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-black animate-in fade-in">
+          <RotateCcw className="w-4 h-4 animate-spin text-[#fcb800]" />
           <span>Filters reset to default Dashboard view.</span>
         </div>
       )}
@@ -208,6 +211,7 @@ export const AdminConsole: React.FC = () => {
           <main className="flex-1 p-6 overflow-y-auto max-h-[calc(100vh-65px)] bg-[#070b14]">
             {activeTab === 'dashboard' && <DashboardView />}
             {activeTab === 'builder' && <WebsiteBuilderView />}
+            {activeTab === 'sections' && <StorefrontSectionsView />}
             {activeTab === 'analytics' && <AnalyticsView />}
             {activeTab === 'products' && <ProductsView />}
             {activeTab === 'inventory' && <InventoryView />}

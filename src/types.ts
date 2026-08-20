@@ -59,6 +59,8 @@ export type ProductType =
   | 'GRAPHICS'
   | 'COURSE'
   | 'MEMBERSHIP'
+  | 'DIRECT_TOPUP'
+  | 'ACCOUNT'
   | 'PAYMENT_GATEWAY';
 
 export interface ProductVariant {
@@ -276,6 +278,11 @@ export interface StoreSettings {
   announcementText: string;
   promoCode: string;
   whatsappNumber: string;
+  whatsappHandle?: string;
+  wechatHandle?: string;
+  telegramHandle?: string;
+  telegramUrl?: string;
+  storeDomain?: string;
   taxRatePercent: number;
   freeShippingThresholdPKR: number;
   activeGateways: {

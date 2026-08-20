@@ -29,15 +29,7 @@ async function startServer() {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  // Initialize MongoDB Connection in background
   let isMongoReady = false;
-  try {
-    await connectDB();
-    await seedDatabaseIfEmpty();
-    isMongoReady = true;
-  } catch (err) {
-    console.warn('[MongoDB Warning] Could not connect at startup, will retry on request:', err);
-  }
 
   // -------------------------------------------------------------
   // REST API v1 Routes
@@ -145,7 +137,7 @@ async function startServer() {
       const updated = await ProductModel.findOneAndUpdate(
         { id: req.params.id },
         { $set: req.body },
-        { new: true }
+        { returnDocument: 'after' }
       );
       res.json(updated);
     } catch (err: any) {
@@ -322,7 +314,7 @@ async function startServer() {
           },
           $set: { updatedAt: new Date().toISOString() }
         },
-        { new: true }
+        { returnDocument: 'after' }
       );
       res.json(updated);
     } catch (err: any) {
@@ -432,6 +424,16 @@ async function startServer() {
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`[PlayBeat Server] Live on http://0.0.0.0:${PORT}`);
+    
+    // Connect to MongoDB and sync database asynchronously in background
+    connectDB()
+      .then(async () => {
+        isMongoReady = true;
+        await seedDatabaseIfEmpty();
+      })
+      .catch((err) => {
+        console.warn('[MongoDB Warning] Could not connect at startup, will retry on request:', err.message);
+      });
   });
 }
 
